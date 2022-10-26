@@ -18,6 +18,8 @@
 #import "FLTPHPickerSaveImageToPathOperation.h"
 #import "messages.g.h"
 
+#import "OverlayView.h"
+
 @implementation FLTImagePickerMethodCallContext
 - (instancetype)initWithResult:(nonnull FlutterResultAdapter)result {
   if (self = [super init]) {
@@ -164,7 +166,9 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
 - (void)pickImageWithSource:(nonnull FLTSourceSpecification *)source
                     maxSize:(nonnull FLTMaxSize *)maxSize
                     quality:(nullable NSNumber *)imageQuality
-               fullMetadata:(NSNumber *)fullMetadata
+                    fullMetadata:(NSNumber *)fullMetadata
+                    overlayOpacity:(nullable NSNumber *)overlayOpacity
+                    overlayImage:(nullable NSString *)overlayImage
                  completion:
                      (nonnull void (^)(NSString *_Nullable, FlutterError *_Nullable))completion {
   [self cancelInProgressCall];
@@ -181,6 +185,8 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
   context.imageQuality = imageQuality;
   context.maxImageCount = 1;
   context.requestFullMetadata = [fullMetadata boolValue];
+  context.overlayOpacity = overlayOpacity;
+  context.overlayImage = overlayImage;
 
   if (source.type == FLTSourceTypeGallery) {  // Capture is not possible with PHPicker
     if (@available(iOS 14, *)) {
@@ -290,6 +296,13 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
       [UIImagePickerController isCameraDeviceAvailable:device]) {
     imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     imagePickerController.cameraDevice = device;
+
+	  OverlayView *overlay = [[OverlayView alloc] initWithFrame:imagePickerController.view.bounds
+                                                andPath:self.callContext.overlayImage
+                                                andOpacity: self.callContext.overlayOpacity];
+    imagePickerController.cameraOverlayView = overlay;
+    imagePickerController.cameraViewTransform = CGAffineTransformTranslate(imagePickerController.cameraViewTransform, 0, overlay.offset);
+
     [[self viewControllerWithWindow:nil] presentViewController:imagePickerController
                                                       animated:YES
                                                     completion:nil];
