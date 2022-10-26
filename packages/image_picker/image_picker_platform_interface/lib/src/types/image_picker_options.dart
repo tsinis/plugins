@@ -14,6 +14,8 @@ class ImagePickerOptions {
     this.imageQuality,
     this.preferredCameraDevice = CameraDevice.rear,
     this.requestFullMetadata = true,
+    this.overlayOpacity,
+    this.overlayImage,
   });
 
   /// The maximum width of the image, in pixels.
@@ -47,4 +49,8 @@ class ImagePickerOptions {
   //
   // Defaults to true.
   final bool requestFullMetadata;
+
+  final int? overlayOpacity;
+
+  final String? overlayImage;
 }

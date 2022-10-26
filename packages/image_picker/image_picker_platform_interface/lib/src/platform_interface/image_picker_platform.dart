@@ -183,6 +183,8 @@ abstract class ImagePickerPlatform extends PlatformInterface {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) {
     throw UnimplementedError('getImage() has not been implemented.');
   }
@@ -284,6 +286,8 @@ abstract class ImagePickerPlatform extends PlatformInterface {
       maxWidth: options.maxWidth,
       imageQuality: options.imageQuality,
       preferredCameraDevice: options.preferredCameraDevice,
+      overlayOpacity: options.overlayOpacity,
+      overlayImage: options.overlayImage,
     );
   }
 
