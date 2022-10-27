@@ -22,8 +22,16 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  image_picker_android: ^0.8.4+11
-  image_picker_for_web: ^2.1.0
+  image_picker_android:
+    git:
+      url: https://github.com/tsinis/plugins/
+      ref: feat/ios-camera-overlay
+      path: packages/image_picker/image_picker_android
+  image_picker_for_web:
+    git:
+      url: https://github.com/tsinis/plugins/
+      ref: feat/ios-camera-overlay
+      path: packages/image_picker/image_picker_for_web
   image_picker_ios:
     git:
       url: https://github.com/tsinis/plugins/
@@ -36,6 +44,16 @@ dependencies:
       path: packages/image_picker/image_picker_platform_interface
 
 dependency_overrides:
+  image_picker_android:
+    git:
+      url: https://github.com/tsinis/plugins/
+      ref: feat/ios-camera-overlay
+      path: packages/image_picker/image_picker_android
+  image_picker_for_web:
+    git:
+      url: https://github.com/tsinis/plugins/
+      ref: feat/ios-camera-overlay
+      path: packages/image_picker/image_picker_for_web
   image_picker_ios:
     git:
       url: https://github.com/tsinis/plugins/
