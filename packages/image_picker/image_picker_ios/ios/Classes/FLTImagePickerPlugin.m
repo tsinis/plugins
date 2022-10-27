@@ -297,7 +297,7 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
     imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     imagePickerController.cameraDevice = device;
 
-	  OverlayView *overlay = [[OverlayView alloc] initWithFrame:imagePickerController.view.bounds
+	OverlayView *overlay = [[OverlayView alloc] initWithFrame:imagePickerController.view.bounds
                                                 andPath:self.callContext.overlayImage
                                                 andOpacity: self.callContext.overlayOpacity];
     imagePickerController.cameraOverlayView = overlay;
