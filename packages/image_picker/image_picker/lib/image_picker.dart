@@ -66,6 +66,8 @@ class ImagePicker {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) {
     return platform.pickImage(
       source: source,
@@ -216,6 +218,8 @@ class ImagePicker {
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
     bool requestFullMetadata = true,
+    int? overlayOpacity,
+    String? overlayImage,
   }) {
     if (imageQuality != null && (imageQuality < 0 || imageQuality > 100)) {
       throw ArgumentError.value(
@@ -236,6 +240,8 @@ class ImagePicker {
         imageQuality: imageQuality,
         preferredCameraDevice: preferredCameraDevice,
         requestFullMetadata: requestFullMetadata,
+        overlayOpacity: overlayOpacity,
+        overlayImage: overlayImage,
       ),
     );
   }

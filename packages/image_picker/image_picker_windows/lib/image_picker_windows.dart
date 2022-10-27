@@ -65,6 +65,8 @@ class ImagePickerWindows extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) async {
     final XFile? file = await getImage(
         source: source,
@@ -111,6 +113,8 @@ class ImagePickerWindows extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) async {
     if (source != ImageSource.gallery) {
       // TODO(azchohfi): Support ImageSource.camera.

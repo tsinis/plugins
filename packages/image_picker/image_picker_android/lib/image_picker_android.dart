@@ -30,6 +30,8 @@ class ImagePickerAndroid extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) async {
     final String? path = await _getImagePath(
       source: source,
@@ -157,6 +159,8 @@ class ImagePickerAndroid extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) async {
     final String? path = await _getImagePath(
       source: source,

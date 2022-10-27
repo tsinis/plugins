@@ -24,6 +24,8 @@ class MethodChannelImagePicker extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) async {
     final String? path = await _getImagePath(
       source: source,
@@ -31,6 +33,8 @@ class MethodChannelImagePicker extends ImagePickerPlatform {
       maxHeight: maxHeight,
       imageQuality: imageQuality,
       preferredCameraDevice: preferredCameraDevice,
+      overlayOpacity: overlayOpacity,
+      overlayImage: overlayImage,
     );
     return path != null ? PickedFile(path) : null;
   }

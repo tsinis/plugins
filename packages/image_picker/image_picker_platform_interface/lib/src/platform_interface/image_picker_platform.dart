@@ -75,6 +75,8 @@ abstract class ImagePickerPlatform extends PlatformInterface {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) {
     throw UnimplementedError('pickImage() has not been implemented.');
   }
