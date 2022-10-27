@@ -6,10 +6,13 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 
 void main() {
@@ -80,6 +83,23 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future<String> _getAssetPath(String fileName) async {
+    final Directory tempDir = await getTemporaryDirectory();
+    final String tempPath = tempDir.path;
+    final String filePath = '$tempPath/$fileName';
+    final File file = File(filePath);
+    if (!file.existsSync()) {
+      final ByteData byteData = await rootBundle.load('assets/$fileName');
+      final ByteBuffer buffer = byteData.buffer;
+      await file.create(recursive: true);
+      await file.writeAsBytes(
+        buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes),
+      );
+    }
+
+    return file.path;
+  }
+
   Future<void> _onImageButtonPressed(ImageSource source,
       {BuildContext? context, bool isMultiImage = false}) async {
     if (_controller != null) {
@@ -116,12 +136,16 @@ class _MyHomePageState extends State<MyHomePage> {
       await _displayPickImageDialog(context!,
           (double? maxWidth, double? maxHeight, int? quality) async {
         try {
+          final String path =
+              await _getAssetPath('lockup_flutter_vertical.png');
           final XFile? pickedFile = await _picker.getImageFromSource(
             source: source,
             options: ImagePickerOptions(
               maxWidth: maxWidth,
               maxHeight: maxHeight,
               imageQuality: quality,
+              overlayOpacity: 33,
+              overlayImage: path,
             ),
           );
           setState(() {
