@@ -285,6 +285,11 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
   }
 }
 
+- (bool)hasOverlayData {
+    if (self.callContext == nil) return false;
+    return self.callContext.overlayImage != nil && self.callContext.overlayOpacity > 0;
+}
+
 - (void)showCamera:(UIImagePickerControllerCameraDevice)device
     withImagePicker:(UIImagePickerController *)imagePickerController {
   @synchronized(self) {
@@ -298,11 +303,14 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
     imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     imagePickerController.cameraDevice = device;
 
-	OverlayView *overlay = [[OverlayView alloc] initWithFrame:imagePickerController.view.bounds
-                                                andPath:self.callContext.overlayImage
-                                                andOpacity: self.callContext.overlayOpacity];
-    imagePickerController.cameraOverlayView = overlay;
-    imagePickerController.cameraViewTransform = CGAffineTransformTranslate(imagePickerController.cameraViewTransform, 0, overlay.offset);
+    if (self.hasOverlayData) {
+          OverlayView *overlay = [[OverlayView alloc] initWithFrame: imagePickerController.view.bounds
+                                                            andPath: self.callContext.overlayImage
+                                                         andOpacity: self.callContext.overlayOpacity];
+          imagePickerController.cameraOverlayView = overlay;
+          imagePickerController.cameraOverlayView.hidden = NO;
+          imagePickerController.cameraViewTransform = CGAffineTransformTranslate(imagePickerController.cameraViewTransform, 0, overlay.offset);
+      }
 
     [[self viewControllerWithWindow:nil] presentViewController:imagePickerController
                                                       animated:YES

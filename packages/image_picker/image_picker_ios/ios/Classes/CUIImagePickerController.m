@@ -17,7 +17,8 @@
 
 // Same as [shouldAutorotate] it's depricated on iOS 16+, but is used for in older systems.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+    return (interfaceOrientation != UIInterfaceOrientationLandscapeLeft
+         || interfaceOrientation != UIInterfaceOrientationLandscapeRight);
 }
 
 
@@ -31,6 +32,56 @@
 // View will be rotated to this one if it's not in landscape already.
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
   return UIInterfaceOrientationLandscapeLeft;
+}
+
+- (void)hideCameraOverlay {
+    [self.cameraOverlayView setHidden:YES];
+}
+
+- (void)showCameraOverlay {
+    [self.cameraOverlayView setHidden:NO];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    if (self.sourceType != UIImagePickerControllerSourceTypeCamera) return;
+    if (self.cameraOverlayView.isHidden) return;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                          selector:@selector(notificationReceived:)
+                                          name:nil
+                                          object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+ if (![[self.navigationController viewControllers] containsObject: self]) {
+        NSLog(@"Unregistred observer");
+        // The view has been removed from the navigation stack or hierarchy.
+        [[NSNotificationCenter defaultCenter] removeObserver: self];
+    }
+}
+
+
+- (void)notificationReceived:(NSNotification *)notification {
+    // When pressed on the camera button to take a picture it will add a slight delay to
+    // remove the lagg of taking away the overlay view.
+    if ([notification.name isEqualToString:@"Recorder_WillCapturePhoto"]) {
+        [self performSelector:@selector(hideCameraOverlay) withObject:nil afterDelay:0.1];
+    }
+
+    // When photo is shot, overlay should not be presented in the preview mode.
+    if ([notification.name isEqualToString:@"_UIImagePickerControllerUserDidCaptureItem"]) {
+        [self hideCameraOverlay];
+    }
+
+    // If user rejected the previewed photo, it will show the camera overlay again
+    if ([notification.name isEqualToString:@"_UIImagePickerControllerUserDidRejectItem"]) {
+        [self showCameraOverlay];
+    }
+
+    // Application is closing, hide overlay to prevent it covering anything else.
+    if ([notification.name isEqualToString:@"UIApplicationSuspendedNotification"]) {
+        [self hideCameraOverlay];
+    }
 }
 
 @end
