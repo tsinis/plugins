@@ -20,16 +20,21 @@ static CGFloat clamp(CGFloat v, CGFloat min, CGFloat max) {
         self.opaque = NO; // Setting the overlay to opaque mode.
         self.backgroundColor = [UIColor clearColor]; // Clears the background color of the overlay.
 
-        NSLog(@"%@", NSStringFromCGRect(self.bounds));
         // Variable for finding a shortest side, first, ssuming we are in portrait mode.
         float shortestSide = self.bounds.size.width;
         // If overlay is started in landscape mode overlay should be rotated.
         bool isLandscape = shortestSide > self.bounds.size.height;
-        // If view is in rotate mode shortest side will be the height of the view.
-        if (isLandscape) {
-            shortestSide = self.bounds.size.height;
-        }
-        NSLog(@"%.2f", shortestSide);
+
+        // This boolean will be later used, since on iOS 16 view will be automatically
+        // rotated to [preferredInterfaceOrientationForPresentation] and also the
+        // [shouldAutorotate] flag depricated there (so it's not used at all).
+        bool isNewestIos = false;
+        // If iOS version is 16.0 or higher/newer, mark it as true.
+        if (@available(iOS 16.0, *)) isNewestIos = true;
+
+        // If view is in landscape mode shortest side will be the height of the view.
+        if (isLandscape) shortestSide = self.bounds.size.height;
+
         float cameraAspectRatio = 4.0 / 3.0; // Camera picker always has 4/3 aspect ratio.
         float longestSide = shortestSide * cameraAspectRatio; // So we can calulate the height of the camera preview.
 
@@ -59,7 +64,7 @@ static CGFloat clamp(CGFloat v, CGFloat min, CGFloat max) {
         // Reduce the height with vertical padding on both sides.
         int paddedLongestSide = longestSide - (padding * 2);
         // Actual frame of the camera preview.
-        CGRect previewFrame = (isLandscape)? CGRectMake(paddedOffset, 0, shortestSide, longestSide) :
+        CGRect previewFrame = (isLandscape || isNewestIos)? CGRectMake(paddedOffset, 0, shortestSide, longestSide) :
                                              CGRectMake(0, paddedOffset, shortestSide, longestSide);
 
         // Load an image from the [path] to show in the overlay.
@@ -75,15 +80,18 @@ static CGFloat clamp(CGFloat v, CGFloat min, CGFloat max) {
         // Clamp [opacityAlpha] just to be sure it's between 0 and 1.0. Convert it to [CGFloat].
         overlayView.alpha = clamp((CGFloat)opacityAlpha, 0.0f, 1.0f);
 
-        if (isLandscape) {
-            int directionModifier = ([UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeLeft) ? 1 : -1;
-            NSLog(@"%i", directionModifier);
+        // On newst iOS view will be automatically rotated to the landscape mode since it's a
+        // [CUIImagePickerController] prefered orientation.
+        if (isLandscape || isNewestIos) {
+            // Rotate image by 90 degrees in landscape mode.
             overlayView.transform = CGAffineTransformMakeRotation(-(M_PI * (90) / 180.0));
+            // Set overlay frame to be exactly as big as camera preview
+            // is, but for the landscape orientation.
             overlayView.frame = CGRectMake(0, 0, paddedLongestSide, shortestSide);
         } else {
-            // Set overlay frame to be exactly as big as camera preview is.
+            // Set overlay frame to be exactly as big as camera preview
+            // is, but for the portrait orientation.
             overlayView.frame = CGRectMake(0, 0, shortestSide, paddedLongestSide);
-
         }
 
         // Fit the [overlayImage] to be proportionally scaled into the preview frame.
