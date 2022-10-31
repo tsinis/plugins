@@ -285,9 +285,9 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
   }
 }
 
-- (bool)hasOverlayData {
-    if (self.callContext == nil) return false;
-    return self.callContext.overlayImage != nil && self.callContext.overlayOpacity > 0;
+- (bool)hasOverlayData { // Just a shorthand for checking Flutter call-context data.
+    if (self.callContext == nil) return false; // Should be checked first, otherwise it can lead to runtime exceptions.
+    return self.callContext.overlayImage != nil && self.callContext.overlayOpacity > 0; // Only add overlay if image exists and opacity is more than zero.
 }
 
 - (void)showCamera:(UIImagePickerControllerCameraDevice)device
@@ -307,10 +307,9 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
           OverlayView *overlay = [[OverlayView alloc] initWithFrame: imagePickerController.view.bounds
                                                             andPath: self.callContext.overlayImage
                                                          andOpacity: self.callContext.overlayOpacity];
-          imagePickerController.cameraOverlayView = overlay;
-          imagePickerController.cameraOverlayView.hidden = NO;
-          imagePickerController.cameraViewTransform = CGAffineTransformTranslate(imagePickerController.cameraViewTransform, 0, overlay.offset);
-      }
+        imagePickerController.cameraOverlayView = overlay; // Asign custom OverlayView.
+        imagePickerController.cameraOverlayView.hidden = YES; // Will be set to NO after small delay.
+    }
 
     [[self viewControllerWithWindow:nil] presentViewController:imagePickerController
                                                       animated:YES
