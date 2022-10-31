@@ -19,6 +19,7 @@
 #import "messages.g.h"
 
 #import "OverlayView.h"
+#import "CUIImagePickerController.h"
 
 @implementation FLTImagePickerMethodCallContext
 - (instancetype)initWithResult:(nonnull FlutterResultAdapter)result {
@@ -69,7 +70,7 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
     return controller;
   }
 
-  return [[UIImagePickerController alloc] init];
+  return [[CUIImagePickerController alloc] init];
 }
 
 - (void)setImagePickerControllerOverrides:
