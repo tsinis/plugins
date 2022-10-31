@@ -40,10 +40,11 @@ static CGFloat clamp(CGFloat v, CGFloat min, CGFloat max) {
 
         // Camera preview has different Y offset than it's "preview" on the "Retake/Use Photo" screen:
         // https://stackoverflow.com/questions/28373749/uiimagepickercontrollers-cameraoverlayview-is-offset-after-taking-photo
-        int padding = 30;
+        // but since we are hidding the overlay with notifications observer it shouldn't be necessary to use at this moment of time.
+        int padding = 0;
         // And also position of camera preview is quite different on different iPhone models, since we
         // don't have an access to source code of default camera controls UI it can be only hardcoded this way:
-        int paddedOffset = 70 + padding;
+        int paddedOffset = 40 + padding;
 
         // Change default [padding] and [paddedOffset] values if it's not an older iPhone,
         // since on newer models there is a bigger screen resolution -> bigger offset and padding.
@@ -54,8 +55,7 @@ static CGFloat clamp(CGFloat v, CGFloat min, CGFloat max) {
                 case 1920: case 2208: // iPhone 6+/6S+/7+/8+
                     break;
                 default: // Newer iPhones, some adjustments might be needed here for new models.
-                    padding = 40;
-                    paddedOffset = 160  + padding;
+                    paddedOffset = 122  + padding;
                     break;
             }
         }
@@ -64,7 +64,7 @@ static CGFloat clamp(CGFloat v, CGFloat min, CGFloat max) {
         // Reduce the height with vertical padding on both sides.
         int paddedLongestSide = longestSide - (padding * 2);
         // Actual frame of the camera preview.
-        CGRect previewFrame = (isLandscape || isNewestIos)? CGRectMake(paddedOffset, 0, shortestSide, longestSide) :
+        CGRect previewFrame = (isLandscape && !isNewestIos)? CGRectMake(paddedOffset, 0, shortestSide, longestSide) :
                                              CGRectMake(0, paddedOffset, shortestSide, longestSide);
 
         // Load an image from the [path] to show in the overlay.
@@ -80,14 +80,20 @@ static CGFloat clamp(CGFloat v, CGFloat min, CGFloat max) {
         // Clamp [opacityAlpha] just to be sure it's between 0 and 1.0. Convert it to [CGFloat].
         overlayView.alpha = clamp((CGFloat)opacityAlpha, 0.0f, 1.0f);
 
-        // On newst iOS view will be automatically rotated to the landscape mode since it's a
+        // On newst iOS view will be automatically rotated to the portrait mode since it's a
         // [CUIImagePickerController] prefered orientation.
-        if (isLandscape || isNewestIos) {
+        if (isLandscape && !isNewestIos) {
+            // This modifier is needed for transforming landscape mode when it's in [UIInterfaceOrientationLandscapeRight]
+            int directionModifier = ([UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeLeft) ? 1 : -1;
             // Rotate image by 90 degrees in landscape mode.
             overlayView.transform = CGAffineTransformMakeRotation(-(M_PI * (90) / 180.0));
             // Set overlay frame to be exactly as big as camera preview
             // is, but for the landscape orientation.
             overlayView.frame = CGRectMake(0, 0, paddedLongestSide, shortestSide);
+            if (directionModifier == 1) {
+                // This 1.5 is more like magic number, needs more different older devices to confirm/change it.
+                overlayView.transform = CGAffineTransformTranslate(overlayView.transform, 0,  (paddedOffset * 1.5));
+            }
         } else {
             // Set overlay frame to be exactly as big as camera preview
             // is, but for the portrait orientation.

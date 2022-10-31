@@ -17,21 +17,21 @@
 
 // Same as [shouldAutorotate] it's depricated on iOS 16+, but is used for in older systems.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation != UIInterfaceOrientationLandscapeLeft
-         || interfaceOrientation != UIInterfaceOrientationLandscapeRight);
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft
+         || interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 
 // The interface orientations that the view controller supports.
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-  return UIInterfaceOrientationMaskLandscape;
+  return UIInterfaceOrientationMaskPortrait;
 }
 
 
-// The prefered orientation to use in camera view (default to landscape left)
-// View will be rotated to this one if it's not in landscape already.
+// The prefered orientation to use in camera view (default to portrait)
+// View will be rotated to this one if it's not in the portrait mode already.
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-  return UIInterfaceOrientationLandscapeLeft;
+  return UIInterfaceOrientationPortrait;
 }
 
 - (void)hideCameraOverlay {
@@ -42,28 +42,36 @@
     [self.cameraOverlayView setHidden:NO];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+/// [self.cameraOverlayView.subviews.count] is only avalible at this moment.
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    // [self.cameraOverlayView] is only avalible when [sourceType] is the camera.
     if (self.sourceType != UIImagePickerControllerSourceTypeCamera) return;
-    if (self.cameraOverlayView.isHidden) return;
+    // If camera overlay has some subviews -> it should be our [OverlayView].
+    if (self.cameraOverlayView.subviews.count < 1) return;
+    // So we have a camera overlay at this moment, let's show it after small delay.
+    [self performSelector:@selector(showCameraOverlay) withObject:nil afterDelay:1.2];
+    // And add notifications observer with a handler.
     [[NSNotificationCenter defaultCenter] addObserver:self
                                           selector:@selector(notificationReceived:)
                                           name:nil
                                           object:nil];
 }
 
+// Remove notification observer if UI is being closed.
 - (void)viewWillDisappear:(BOOL)animated{
+    // Camera preview has to navigation routes.
  if (![[self.navigationController viewControllers] containsObject: self]) {
-        NSLog(@"Unregistred observer");
         // The view has been removed from the navigation stack or hierarchy.
         [[NSNotificationCenter defaultCenter] removeObserver: self];
     }
 }
 
 
+// Notification observer, that will listen to a [NSNotification]s and perform actions accordingly.
 - (void)notificationReceived:(NSNotification *)notification {
     // When pressed on the camera button to take a picture it will add a slight delay to
-    // remove the lagg of taking away the overlay view.
+    // remove the lagg of taking navigation to the overlay view.
     if ([notification.name isEqualToString:@"Recorder_WillCapturePhoto"]) {
         [self performSelector:@selector(hideCameraOverlay) withObject:nil afterDelay:0.1];
     }
