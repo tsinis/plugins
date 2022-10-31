@@ -20,18 +20,27 @@ static CGFloat clamp(CGFloat v, CGFloat min, CGFloat max) {
         self.opaque = NO; // Setting the overlay to opaque mode.
         self.backgroundColor = [UIColor clearColor]; // Clears the background color of the overlay.
 
+        NSLog(@"%@", NSStringFromCGRect(self.bounds));
+        // Variable for finding a shortest side, first, ssuming we are in portrait mode.
+        float shortestSide = self.bounds.size.width;
+        // If overlay is started in landscape mode overlay should be rotated.
+        bool isLandscape = shortestSide > self.bounds.size.height;
+        // If view is in rotate mode shortest side will be the height of the view.
+        if (isLandscape) {
+            shortestSide = self.bounds.size.height;
+        }
+        NSLog(@"%.2f", shortestSide);
         float cameraAspectRatio = 4.0 / 3.0; // Camera picker always has 4/3 aspect ratio.
-        float previewWidth = self.bounds.size.width; // And it's always as wide as screen is.
-        float previewHeight = previewWidth * cameraAspectRatio; // So we can calulate the height of the camera preview.
+        float longestSide = shortestSide * cameraAspectRatio; // So we can calulate the height of the camera preview.
 
         // Camera preview has different Y offset than it's "preview" on the "Retake/Use Photo" screen:
         // https://stackoverflow.com/questions/28373749/uiimagepickercontrollers-cameraoverlayview-is-offset-after-taking-photo
         int padding = 30;
         // And also position of camera preview is quite different on different iPhone models, since we
         // don't have an access to source code of default camera controls UI it can be only hardcoded this way:
-        int topOffset = 70 + padding;
+        int paddedOffset = 70 + padding;
 
-        // Change default [padding] and [topOffset] values if it's not an older iPhone,
+        // Change default [padding] and [paddedOffset] values if it's not an older iPhone,
         // since on newer models there is a bigger screen resolution -> bigger offset and padding.
         if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
             switch ((int)[[UIScreen mainScreen] nativeBounds].size.height) {
@@ -41,16 +50,17 @@ static CGFloat clamp(CGFloat v, CGFloat min, CGFloat max) {
                     break;
                 default: // Newer iPhones, some adjustments might be needed here for new models.
                     padding = 40;
-                    topOffset = 160  + padding;
+                    paddedOffset = 160  + padding;
                     break;
             }
         }
         // Setting offset property to padding value, to be used in [imagePickerController.cameraViewTransform].
         self.offset = (CGFloat)padding;
         // Reduce the height with vertical padding on both sides.
-        int paddedHeight = previewHeight - (padding * 2);
+        int paddedLongestSide = longestSide - (padding * 2);
         // Actual frame of the camera preview.
-        CGRect previewFrame = CGRectMake(0, topOffset, previewWidth, paddedHeight);
+        CGRect previewFrame = (isLandscape)? CGRectMake(paddedOffset, 0, shortestSide, longestSide) :
+                                             CGRectMake(0, paddedOffset, shortestSide, longestSide);
 
         // Load an image from the [path] to show in the overlay.
         UIImage *overlayImage = [UIImage imageWithContentsOfFile:path];
@@ -64,8 +74,18 @@ static CGFloat clamp(CGFloat v, CGFloat min, CGFloat max) {
         float opacityAlpha = floatOpacity / 100.0f;
         // Clamp [opacityAlpha] just to be sure it's between 0 and 1.0. Convert it to [CGFloat].
         overlayView.alpha = clamp((CGFloat)opacityAlpha, 0.0f, 1.0f);
-        // Set overlay frame to be exactly as big as camera preview is.
-        overlayView.frame = CGRectMake(0, 0, previewWidth, paddedHeight);
+
+        if (isLandscape) {
+            int directionModifier = ([UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeLeft) ? 1 : -1;
+            NSLog(@"%i", directionModifier);
+            overlayView.transform = CGAffineTransformMakeRotation(-(M_PI * (90) / 180.0));
+            overlayView.frame = CGRectMake(0, 0, paddedLongestSide, shortestSide);
+        } else {
+            // Set overlay frame to be exactly as big as camera preview is.
+            overlayView.frame = CGRectMake(0, 0, shortestSide, paddedLongestSide);
+
+        }
+
         // Fit the [overlayImage] to be proportionally scaled into the preview frame.
 		overlayView.contentMode = UIViewContentModeScaleAspectFit;
         // Add this new image view to the overlay view.
