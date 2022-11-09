@@ -15,7 +15,7 @@ API_AVAILABLE(ios(14))
 @property(assign, nonatomic) NSNumber *desiredImageQuality;
 @property(assign, nonatomic) BOOL requestFullMetadata;
 @property(nonatomic, assign) NSNumber *overlayOpacity;
-@property(nonatomic, assign) NSString *overlayImage;
+@property(strong) NSString *overlayImage;
 
 @end
 

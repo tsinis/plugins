@@ -287,7 +287,7 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
 
 - (bool)hasOverlayData { // Just a shorthand for checking Flutter call-context data.
     if (self.callContext == nil) return false; // Should be checked first, otherwise it can lead to runtime exceptions.
-    return self.callContext.overlayImage != nil && self.callContext.overlayOpacity > 0; // Only add overlay if image exists and opacity is more than zero.
+    return [self.callContext.overlayImage length] > 0 && self.callContext.overlayOpacity > 0; // Only add overlay if image exists and opacity is more than zero.
 }
 
 - (void)showCamera:(UIImagePickerControllerCameraDevice)device

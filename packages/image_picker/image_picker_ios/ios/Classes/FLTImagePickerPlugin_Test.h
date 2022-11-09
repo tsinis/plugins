@@ -51,7 +51,7 @@ typedef void (^FlutterResultAdapter)(NSArray<NSString *> *_Nullable, FlutterErro
 
 @property(nonatomic, assign) NSNumber *overlayOpacity;
 
-@property(nonatomic, assign) NSString *overlayImage;
+@property(strong) NSString *overlayImage;
 
 @end
 
