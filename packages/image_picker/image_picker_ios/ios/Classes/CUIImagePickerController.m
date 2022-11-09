@@ -64,6 +64,7 @@
  if (![[self.navigationController viewControllers] containsObject: self]) {
         // The view has been removed from the navigation stack or hierarchy.
         [[NSNotificationCenter defaultCenter] removeObserver: self];
+        [[UIApplication sharedApplication] setStatusBarHidden: NO];
     }
 }
 
