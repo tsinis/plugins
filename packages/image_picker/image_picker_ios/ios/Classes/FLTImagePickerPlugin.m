@@ -248,7 +248,7 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
   if (maxDurationSeconds) {
     NSTimeInterval max = [maxDurationSeconds doubleValue];
     imagePickerController.videoMaximumDuration = max;
-    imagePickerController.allowsEditing = YES;
+    imagePickerController.allowsEditing = NO;
   }
 
   self.callContext = context;
