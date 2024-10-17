@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
     (NSString *)kUTTypeMovie, (NSString *)kUTTypeAVIMovie, (NSString *)kUTTypeVideo,
     (NSString *)kUTTypeMPEG4
   ];
-  imagePickerController.videoQuality = UIImagePickerControllerQualityTypeMedium;
+  imagePickerController.videoQuality = UIImagePickerControllerQualityTypeHigh;
 
   if (maxDurationSeconds) {
     NSTimeInterval max = [maxDurationSeconds doubleValue];
