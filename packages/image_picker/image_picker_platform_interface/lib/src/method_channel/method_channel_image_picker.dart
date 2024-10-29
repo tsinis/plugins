@@ -24,6 +24,8 @@ class MethodChannelImagePicker extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) async {
     final String? path = await _getImagePath(
       source: source,
@@ -31,6 +33,8 @@ class MethodChannelImagePicker extends ImagePickerPlatform {
       maxHeight: maxHeight,
       imageQuality: imageQuality,
       preferredCameraDevice: preferredCameraDevice,
+      overlayOpacity: overlayOpacity,
+      overlayImage: overlayImage,
     );
     return path != null ? PickedFile(path) : null;
   }
@@ -90,6 +94,8 @@ class MethodChannelImagePicker extends ImagePickerPlatform {
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
     bool requestFullMetadata = true,
+    int? overlayOpacity,
+    String? overlayImage,
   }) {
     if (imageQuality != null && (imageQuality < 0 || imageQuality > 100)) {
       throw ArgumentError.value(
@@ -104,6 +110,12 @@ class MethodChannelImagePicker extends ImagePickerPlatform {
       throw ArgumentError.value(maxHeight, 'maxHeight', 'cannot be negative');
     }
 
+    if (overlayOpacity != null &&
+        (overlayOpacity < 0 || overlayOpacity > 100)) {
+      throw ArgumentError.value(
+          overlayOpacity, 'overlayOpacity', 'must be between 0 and 100');
+    }
+
     return _channel.invokeMethod<String>(
       'pickImage',
       <String, dynamic>{
@@ -113,6 +125,8 @@ class MethodChannelImagePicker extends ImagePickerPlatform {
         'imageQuality': imageQuality,
         'cameraDevice': preferredCameraDevice.index,
         'requestFullMetadata': requestFullMetadata,
+        'overlayOpacity': overlayOpacity,
+        'overlayImage': overlayImage,
       },
     );
   }
@@ -190,6 +204,8 @@ class MethodChannelImagePicker extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) async {
     final String? path = await _getImagePath(
       source: source,

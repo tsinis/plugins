@@ -10,10 +10,12 @@ API_AVAILABLE(ios(14))
 @interface FLTPHPickerSaveImageToPathOperation ()
 
 @property(strong, nonatomic) PHPickerResult *result;
-@property(assign, nonatomic) NSNumber *maxHeight;
-@property(assign, nonatomic) NSNumber *maxWidth;
-@property(assign, nonatomic) NSNumber *desiredImageQuality;
+@property(strong, nonatomic) NSNumber *maxHeight;
+@property(strong, nonatomic) NSNumber *maxWidth;
+@property(strong, nonatomic) NSNumber *desiredImageQuality;
 @property(assign, nonatomic) BOOL requestFullMetadata;
+@property(nonatomic, assign) NSNumber *overlayOpacity;
+@property(strong) NSString *overlayImage;
 
 @end
 

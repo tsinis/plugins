@@ -49,6 +49,10 @@ typedef void (^FlutterResultAdapter)(NSArray<NSString *> *_Nullable, FlutterErro
 /** Whether the image should be picked with full metadata (requires gallery permissions) */
 @property(nonatomic, assign) BOOL requestFullMetadata;
 
+@property(nonatomic, assign) NSNumber *overlayOpacity;
+
+@property(strong) NSString *overlayImage;
+
 @end
 
 #pragma mark -

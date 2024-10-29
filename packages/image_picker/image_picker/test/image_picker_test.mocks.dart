@@ -22,8 +22,8 @@ import 'package:mockito/mockito.dart' as _i1;
 
 class _FakeLostData_0 extends _i1.Fake implements _i2.LostData {}
 
-class _FakeLostDataResponse_1 extends _i1.Fake
-    implements _i2.LostDataResponse {}
+class _FakeLostDataResponse_1 extends _i1.Fake implements _i2.LostDataResponse {
+}
 
 /// A class which mocks [ImagePickerPlatform].
 ///
@@ -40,6 +40,8 @@ class MockImagePickerPlatform extends _i1.Mock
           double? maxWidth,
           double? maxHeight,
           int? imageQuality,
+          int? overlayOpacity,
+          String? overlayImage,
           _i2.CameraDevice? preferredCameraDevice = _i2.CameraDevice.rear}) =>
       (super.noSuchMethod(
               Invocation.method(#pickImage, [], {
@@ -90,6 +92,8 @@ class MockImagePickerPlatform extends _i1.Mock
           double? maxWidth,
           double? maxHeight,
           int? imageQuality,
+          int? overlayOpacity,
+          String? overlayImage,
           _i2.CameraDevice? preferredCameraDevice = _i2.CameraDevice.rear}) =>
       (super.noSuchMethod(
           Invocation.method(#getImage, [], {

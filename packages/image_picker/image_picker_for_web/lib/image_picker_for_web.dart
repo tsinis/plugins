@@ -60,6 +60,8 @@ class ImagePickerPlugin extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) {
     final String? capture =
         computeCaptureAttribute(source, preferredCameraDevice);
@@ -124,6 +126,8 @@ class ImagePickerPlugin extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) async {
     final String? capture =
         computeCaptureAttribute(source, preferredCameraDevice);

@@ -28,6 +28,20 @@
 
 @implementation FLTImagePickerImageUtil : NSObject
 
+static UIImage *FLTImagePickerDrawScaledImage(UIImage *imageToScale, double width, double height) {
+  UIGraphicsImageRenderer *imageRenderer =
+      [[UIGraphicsImageRenderer alloc] initWithSize:CGSizeMake(width, height)
+                                             format:imageToScale.imageRendererFormat];
+  return [imageRenderer imageWithActions:^(UIGraphicsImageRendererContext *rendererContext) {
+    CGContextRef cgContext = rendererContext.CGContext;
+
+    // Flip vertically to translate between UIKit and Quartz.
+    CGContextTranslateCTM(cgContext, 0, height);
+    CGContextScaleCTM(cgContext, 1, -1);
+    CGContextDrawImage(cgContext, CGRectMake(0, 0, width, height), imageToScale.CGImage);
+  }];
+}
+
 + (UIImage *)scaledImage:(UIImage *)image
                 maxWidth:(NSNumber *)maxWidth
                maxHeight:(NSNumber *)maxHeight
@@ -35,8 +49,16 @@
   double originalWidth = image.size.width;
   double originalHeight = image.size.height;
 
-  bool hasMaxWidth = maxWidth != nil;
-  bool hasMaxHeight = maxHeight != nil;
+  BOOL hasMaxWidth = maxWidth != nil;
+  BOOL hasMaxHeight = maxHeight != nil;
+
+  if ((originalWidth == maxWidth.doubleValue && originalHeight == maxHeight.doubleValue) ||
+      (!hasMaxWidth && !hasMaxHeight)) {
+     // Nothing to scale.
+     return image;
+    }
+
+  double aspectRatio = originalWidth / originalHeight;
 
   double width = hasMaxWidth ? MIN([maxWidth doubleValue], originalWidth) : originalWidth;
   double height = hasMaxHeight ? MIN([maxHeight doubleValue], originalHeight) : originalHeight;
@@ -75,12 +97,7 @@
                                                 scale:1
                                           orientation:image.imageOrientation];
 
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(width, height), NO, 1.0);
-    [imageToScale drawInRect:CGRectMake(0, 0, width, height)];
-
-    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return scaledImage;
+    return FLTImagePickerDrawScaledImage(imageToScale, width, height);
   }
 
   // Scaling the image always rotate itself based on the current imageOrientation of the original
@@ -104,19 +121,14 @@
     height = temp;
   }
 
-  UIGraphicsBeginImageContextWithOptions(CGSizeMake(width, height), NO, 1.0);
-  [imageToScale drawInRect:CGRectMake(0, 0, width, height)];
-
-  UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
-  UIGraphicsEndImageContext();
-  return scaledImage;
+  return FLTImagePickerDrawScaledImage(imageToScale, width, height);
 }
 
 + (GIFInfo *)scaledGIFImage:(NSData *)data
                    maxWidth:(NSNumber *)maxWidth
                   maxHeight:(NSNumber *)maxHeight {
   NSMutableDictionary<NSString *, id> *options = [NSMutableDictionary dictionary];
-  options[(NSString *)kCGImageSourceShouldCache] = @(YES);
+  options[(NSString *)kCGImageSourceShouldCache] = @YES;
   options[(NSString *)kCGImageSourceTypeIdentifierHint] = (NSString *)kUTTypeGIF;
 
   CGImageSourceRef imageSource =

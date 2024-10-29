@@ -41,6 +41,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 1,
@@ -49,6 +51,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -96,6 +100,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -104,6 +110,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -112,6 +120,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -120,6 +130,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -128,6 +140,8 @@ void main() {
               'imageQuality': 70,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -136,6 +150,8 @@ void main() {
               'imageQuality': 70,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -144,6 +160,8 @@ void main() {
               'imageQuality': 70,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -205,6 +223,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -225,6 +245,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 1,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -529,6 +551,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 1,
@@ -537,6 +561,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -584,6 +610,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -592,6 +620,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -600,6 +630,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -608,6 +640,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -616,6 +650,8 @@ void main() {
               'imageQuality': 70,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -624,6 +660,8 @@ void main() {
               'imageQuality': 70,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -632,6 +670,8 @@ void main() {
               'imageQuality': 70,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -692,6 +732,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -712,6 +754,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 1,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -1032,6 +1076,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 1,
@@ -1040,6 +1086,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -1095,6 +1143,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -1103,6 +1153,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -1111,6 +1163,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -1119,6 +1173,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -1127,6 +1183,8 @@ void main() {
               'imageQuality': 70,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -1135,6 +1193,8 @@ void main() {
               'imageQuality': 70,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
             isMethodCall('pickImage', arguments: <String, dynamic>{
               'source': 0,
@@ -1143,6 +1203,8 @@ void main() {
               'imageQuality': 70,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -1223,6 +1285,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -1246,6 +1310,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 1,
               'requestFullMetadata': true,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );
@@ -1267,6 +1333,8 @@ void main() {
               'imageQuality': null,
               'cameraDevice': 0,
               'requestFullMetadata': false,
+              'overlayOpacity': null,
+              'overlayImage': null,
             }),
           ],
         );

@@ -14,6 +14,8 @@ class ImagePickerOptions {
     this.imageQuality,
     this.preferredCameraDevice = CameraDevice.rear,
     this.requestFullMetadata = true,
+    this.overlayOpacity,
+    this.overlayImage,
   });
 
   /// The maximum width of the image, in pixels.
@@ -47,4 +49,14 @@ class ImagePickerOptions {
   //
   // Defaults to true.
   final bool requestFullMetadata;
+
+  /// Opacity of [overlayImage], must be between 0 (fully transparent)
+  /// and 100 (non-transparent). Default value is null (0).
+  /// Ignored if the source is not [ImageSource.camera].
+  final int? overlayOpacity;
+
+  /// Path to overlay image, typically a PNG file. Default to null
+  /// it means, no overlay image is displayed.
+  /// Ignored if the source is not [ImageSource.camera].
+  final String? overlayImage;
 }

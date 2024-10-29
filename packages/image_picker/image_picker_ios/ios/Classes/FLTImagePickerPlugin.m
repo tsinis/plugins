@@ -18,6 +18,9 @@
 #import "FLTPHPickerSaveImageToPathOperation.h"
 #import "messages.g.h"
 
+#import "OverlayView.h"
+#import "CUIImagePickerController.h"
+
 @implementation FLTImagePickerMethodCallContext
 - (instancetype)initWithResult:(nonnull FlutterResultAdapter)result {
   if (self = [super init]) {
@@ -67,7 +70,7 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
     return controller;
   }
 
-  return [[UIImagePickerController alloc] init];
+  return [[CUIImagePickerController alloc] init];
 }
 
 - (void)setImagePickerControllerOverrides:
@@ -164,7 +167,9 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
 - (void)pickImageWithSource:(nonnull FLTSourceSpecification *)source
                     maxSize:(nonnull FLTMaxSize *)maxSize
                     quality:(nullable NSNumber *)imageQuality
-               fullMetadata:(NSNumber *)fullMetadata
+                    fullMetadata:(NSNumber *)fullMetadata
+                    overlayOpacity:(nullable NSNumber *)overlayOpacity
+                    overlayImage:(nullable NSString *)overlayImage
                  completion:
                      (nonnull void (^)(NSString *_Nullable, FlutterError *_Nullable))completion {
   [self cancelInProgressCall];
@@ -181,6 +186,8 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
   context.imageQuality = imageQuality;
   context.maxImageCount = 1;
   context.requestFullMetadata = [fullMetadata boolValue];
+  context.overlayOpacity = overlayOpacity;
+  context.overlayImage = overlayImage;
 
   if (source.type == FLTSourceTypeGallery) {  // Capture is not possible with PHPicker
     if (@available(iOS 14, *)) {
@@ -241,6 +248,7 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
   if (maxDurationSeconds) {
     NSTimeInterval max = [maxDurationSeconds doubleValue];
     imagePickerController.videoMaximumDuration = max;
+    imagePickerController.allowsEditing = NO;
   }
 
   self.callContext = context;
@@ -278,6 +286,11 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
   }
 }
 
+- (bool)hasOverlayData { // Just a shorthand for checking Flutter call-context data.
+    if (self.callContext == nil) return false; // Should be checked first, otherwise it can lead to runtime exceptions.
+    return [self.callContext.overlayImage length] > 0 && self.callContext.overlayOpacity > 0; // Only add overlay if image exists and opacity is more than zero.
+}
+
 - (void)showCamera:(UIImagePickerControllerCameraDevice)device
     withImagePicker:(UIImagePickerController *)imagePickerController {
   @synchronized(self) {
@@ -290,6 +303,15 @@ typedef NS_ENUM(NSInteger, ImagePickerClassType) { UIImagePickerClassType, PHPic
       [UIImagePickerController isCameraDeviceAvailable:device]) {
     imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     imagePickerController.cameraDevice = device;
+
+    if (self.hasOverlayData) {
+          OverlayView *overlay = [[OverlayView alloc] initWithFrame: imagePickerController.view.bounds
+                                                            andPath: self.callContext.overlayImage
+                                                         andOpacity: self.callContext.overlayOpacity];
+        imagePickerController.cameraOverlayView = overlay; // Asign custom OverlayView.
+        imagePickerController.cameraOverlayView.hidden = YES; // Will be set to NO after small delay.
+    }
+
     [[self viewControllerWithWindow:nil] presentViewController:imagePickerController
                                                       animated:YES
                                                     completion:nil];

@@ -47,6 +47,8 @@ class ImagePickerIOS extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) async {
     final String? path = await _pickImageAsPath(
       source: source,
@@ -55,6 +57,8 @@ class ImagePickerIOS extends ImagePickerPlatform {
         maxHeight: maxHeight,
         imageQuality: imageQuality,
         preferredCameraDevice: preferredCameraDevice,
+        overlayOpacity: overlayOpacity,
+        overlayImage: overlayImage,
       ),
     );
     return path != null ? PickedFile(path) : null;
@@ -154,6 +158,13 @@ class ImagePickerIOS extends ImagePickerPlatform {
       throw ArgumentError.value(maxHeight, 'maxHeight', 'cannot be negative');
     }
 
+    final int? overlayOpacity = options.overlayOpacity;
+    if (overlayOpacity != null &&
+        (overlayOpacity < 0 || overlayOpacity > 100)) {
+      throw ArgumentError.value(
+          overlayOpacity, 'overlayOpacity', 'must be between 0 and 100');
+    }
+
     return _hostApi.pickImage(
       SourceSpecification(
         type: _convertSource(source),
@@ -162,6 +173,8 @@ class ImagePickerIOS extends ImagePickerPlatform {
       MaxSize(width: maxWidth, height: maxHeight),
       imageQuality,
       options.requestFullMetadata,
+      overlayOpacity,
+      options.overlayImage,
     );
   }
 
@@ -198,6 +211,8 @@ class ImagePickerIOS extends ImagePickerPlatform {
     double? maxHeight,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
+    int? overlayOpacity,
+    String? overlayImage,
   }) async {
     final String? path = await _pickImageAsPath(
       source: source,
@@ -206,6 +221,8 @@ class ImagePickerIOS extends ImagePickerPlatform {
         maxHeight: maxHeight,
         imageQuality: imageQuality,
         preferredCameraDevice: preferredCameraDevice,
+        overlayOpacity: overlayOpacity,
+        overlayImage: overlayImage,
       ),
     );
     return path != null ? XFile(path) : null;
